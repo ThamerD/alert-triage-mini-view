@@ -6,7 +6,10 @@ keyboard-driven workflow.
 
 ## Demo
 
-![Demo]()
+
+https://github.com/user-attachments/assets/254fc1d6-c422-4d87-a996-897f74dcd09b
+
+
 
 ## Run
 
