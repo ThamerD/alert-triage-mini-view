@@ -1,0 +1,79 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.panel {
+  background: #161a20;
+  border: 1px solid #2e3645;
+  border-radius: 8px;
+  padding: 18px 22px 22px;
+  min-width: 380px;
+  max-width: 520px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.5);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #e3e7ee;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.closeBtn {
+  background: transparent;
+  color: #8893a5;
+  border: none;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.closeBtn:hover {
+  color: #e3e7ee;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table td {
+  padding: 7px 6px;
+  font-size: 12px;
+  vertical-align: middle;
+}
+
+.keys {
+  width: 140px;
+  white-space: nowrap;
+}
+
+.keys kbd {
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  background: #1c222b;
+  border: 1px solid #2e3645;
+  border-bottom-width: 2px;
+  border-radius: 3px;
+  padding: 2px 7px;
+  font-size: 11px;
+  color: #e3e7ee;
+  margin-right: 4px;
+}
+
+.sep {
+  color: #6c7689;
+  margin: 0 4px;
+}
+
+.desc {
+  color: #b8c1ce;
+}
