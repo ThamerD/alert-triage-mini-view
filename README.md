@@ -65,8 +65,7 @@ the single biggest throughput win in a triage UI.
 
 ## How I used AI coding agents
 
-Built with Claude Code (this repo was scaffolded and written end-to-end
-inside a session). What I delegated vs. drove:
+Built with Claude Code. What I delegated vs. drove:
 
 - **Delegated:** boilerplate (tsconfig, layout.tsx, CSS module bodies),
   the 200-alert JSON corpus (with my distribution targets: ~5% Critical,
