@@ -4,6 +4,10 @@ A Next.js 16 + TypeScript triage page for security alerts. Sortable
 and filterable list, side drawer for detail, in-memory status changes,
 keyboard-driven workflow.
 
+## Demo
+
+![Demo]()
+
 ## Run
 
 ```
