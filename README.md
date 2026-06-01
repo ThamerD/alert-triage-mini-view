@@ -19,9 +19,9 @@ Built and verified against **Node v22.20.0 / Next.js v16.2.6**.
 app/                  Next.js App Router page + layout + global CSS
 components/           AlertList, AlertRow, FilterBar, AlertDrawer, HelpOverlay, SeverityBadge
 lib/                  types.ts, filterAlerts.ts, useKeyboardShortcuts.ts
-public/alerts.json    200 hand-written alerts
+public/alerts.json    200 mock alerts
 backend/              C# ASP.NET controller + SQL schema (review-only, not wired)
-plan.md               The plan we agreed on before building
+plan.md               The plan created with the coding agent before building
 ```
 
 ## Key decisions and trade-offs
@@ -35,26 +35,26 @@ plan.md               The plan we agreed on before building
   `useState`. Pure functions (`filterAndSort`) sit in `lib/` and are
   memoized at the page level.
 - **Side drawer over modal.** Keeps the list in view while reading the
-  detail - standard SOC pattern, matches Splunk SOAR / Chronicle / Sentinel.
+  detail. Standard SOC pattern, matches Splunk SOAR / Chronicle / Sentinel.
 - **Static `public/alerts.json` fetched on mount** rather than imported as a
   module. Mimics a real API call and makes it trivial to swap for a backend.
 - **Severity-driven visual scan-ability.** Red/orange/amber/slate left bar
   on every row, plus colored severity badge.
 - **Keyboard-first.** `j`/`k` navigate, `1-5` set status, `/` focuses
   search, `Esc` closes the drawer, `?` toggles a cheatsheet. SOC analysts
-  triage hundreds of alerts per shift - keyboard navigation is the single
-  biggest throughput win and a baseline expectation in tools they already
-  use.
+  triage hundreds of alerts per shift, and keyboard navigation is the
+  single biggest throughput win and a baseline expectation in tools they
+  already use.
 - **`createdAt` shown as relative time** ("4m ago", "2h ago") with a
   30-second tick. Absolute timestamp is shown in the drawer.
 
 ## UX improvement (the bonus)
 
-Two things, picked together: **severity-colored rows + full keyboard
-shortcuts**. Rationale - a triage shift is two motions, scanning the queue
-and acting on a focused row. Color handles the scan; the keymap handles
-the act. Either alone is a noticeable miss; both together is what makes
-mass triage feel light.
+**Full keyboard shortcuts.** `j`/`k` to walk the queue, `1-5` to set
+status on the focused alert, `/` to jump into search, `Esc` to close,
+`?` for a cheatsheet. SOC analysts triage hundreds of alerts per shift
+and live on the keyboard. Cutting the mouse out of the inner loop is
+the single biggest throughput win in a triage UI.
 
 ## How I used AI coding agents
 
@@ -62,19 +62,18 @@ Built with Claude Code (this repo was scaffolded and written end-to-end
 inside a session). What I delegated vs. drove:
 
 - **Delegated:** boilerplate (tsconfig, layout.tsx, CSS module bodies),
-  the 200-alert JSON corpus (with my distribution targets - ~5% Critical,
-  ~55% New, source/severity balanced), C# / SQL boilerplate including the
-  inline production-readiness commentary.
+  the 200-alert JSON corpus (with my distribution targets: ~5% Critical,
+  ~55% New, source/severity balanced), C# / SQL boilerplate.
 - **Drove (overrode the default suggestion):** chose App Router up front;
   rejected Tailwind / shadcn;
-  rejected a modal in favour of a drawer; picked the combined UX bonus
-  rather than one of the four single options the agent offered; made the
+  rejected a modal in favour of a drawer; drove the UX improvement "bonus"
+  ; made the
   agent ask clarifying questions before writing any code, so we built the
   right thing the first time.
 - **Pattern:** two rounds of structured "A / B / C with tradeoffs"
   questions up front, then a written `plan.md` checked into the repo
-  before code was touched. Implementation work then ran without
-  back-and-forth.
+  before code was touched. Adjust and confirm plan before writing code.
+  Then: build, review, test, fix, commit.
 
 ## What I'd do differently for production
 
@@ -102,5 +101,5 @@ inside a session). What I delegated vs. drove:
   tests with React Testing Library for the keyboard hook and drawer
   status changes; Playwright for the end-to-end triage flow.
 - **Telemetry.** Time-to-acknowledge, time-to-resolve, status-change rate
-  per analyst - the metrics that tell you whether the UX is actually
-  helping the team move faster.
+  per analyst. These are the metrics that tell you whether the UX is
+  actually helping the team move faster.
