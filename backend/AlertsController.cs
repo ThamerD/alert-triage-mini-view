@@ -4,8 +4,6 @@
 // Endpoint shape:  PATCH /api/alerts/{id}/status
 // Body         :   { "status": "In Progress", "note": "optional" }
 // Response     :   200 with updated Alert, 400 / 404 / 409 / 412 on errors
-//
-// Production-ready notes are inline as // PROD: comments.
 
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -145,49 +143,3 @@ public sealed class AlertsController : ControllerBase
 
 // Stub so the file compiles without EF Core in scope.
 public sealed class DbUpdateConcurrencyException : Exception { }
-
-// ----------------------------------------------------------------------------
-// Production-readiness checklist (in addition to the inline notes above):
-//
-// 1. Authentication & authorization
-//    - JWT bearer + analyst role; tier-2+ for Escalated/Suppressed transitions.
-//    - Per-tenant scoping if multi-tenant SaaS.
-//
-// 2. Auditing
-//    - Every status change writes a row to AlertStatusHistory (see schema.sql)
-//      atomically within the same transaction as the UPDATE.
-//    - Include actor, timestamp, prior status, new status, optional note,
-//      request id, source IP (forwarded), user-agent.
-//
-// 3. Idempotency
-//    - Accept an "Idempotency-Key" header; cache the response for ~24h so a
-//      retry from a flaky network does not double-write a transition.
-//
-// 4. Concurrency
-//    - rowversion / optimistic concurrency as shown above.
-//
-// 5. Observability
-//    - Structured logs with correlation id.
-//    - Metrics: status_change_total{from,to}, latency histogram, conflict rate.
-//    - Traces propagated through the bus event.
-//
-// 6. Transport
-//    - HTTPS only; HSTS; reject non-application/json; max body 1KB.
-//
-// 7. Rate limiting
-//    - AspNetCore RateLimiter, fixed-window per analyst id + IP.
-//
-// 8. Schema migrations
-//    - Status enum kept in sync between API (AlertStatus) and DB (CHECK constraint
-//      on status column). Migrations include enum-value addition only after both
-//      sides ship.
-//
-// 9. State-machine validation
-//    - Disallow Suppressed -> New, Resolved -> New, etc., unless the user has a
-//      reopen role. Enforce in repo so the rule is testable in isolation.
-//
-// 10. Backpressure
-//     - The same controller is the read path for a list view; pagination,
-//       server-side filter, and a covering index are required to keep p99 low
-//       at production volume.
-// ----------------------------------------------------------------------------
