@@ -1,6 +1,7 @@
 .row {
   display: flex;
   align-items: stretch;
+  flex-shrink: 0;
   width: 100%;
   padding: 0;
   background: #161a20;
